@@ -1,0 +1,13 @@
+GET http://localhost:5000/books
+
+###
+POST http://localhost:5000/book
+Content-Type: application/json
+
+{
+     "nama_buku",
+        "kode_buku",
+        "pengarang",
+        "kategori",
+        "id_penerbit",
+}

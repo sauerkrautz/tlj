@@ -1,0 +1,16 @@
+###
+POST http://localhost:5000/publisher
+Content-Type: application/json
+
+{
+    "nama_penerbit": "azam",
+    "alamat": "bojonegoro",
+    "kota": "kediri",
+    "no_telp": 1231123
+}
+
+###
+GET http://localhost:5000/publishers
+
+###
+DELETE http://localhost:5000/publisher

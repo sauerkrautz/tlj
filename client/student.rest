@@ -1,0 +1,13 @@
+GET http://localhost:5000/students
+
+###
+POST http://localhost:5000/student
+Content-Type: application/json
+
+{
+    "nis": "1982379123",
+    "nama": "azam",
+    "jekel": "L",
+    "kelas": "TeKaJe",
+    "jurusan": "tekaje"
+}

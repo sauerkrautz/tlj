@@ -1,0 +1,24 @@
+GET http://localhost:5000/peminjamans
+
+###
+POST http://localhost:5000/peminjaman
+Content-Type: application/json
+
+{
+  "id_buku": 1,
+  "id_siswa": 3
+}
+
+###
+PUT http://localhost:5000/peminjaman/1
+Content-Type: application/json
+
+{
+    "id_buku": 1,
+  "id_siswa": 5
+}
+
+###
+DELETE http://localhost:5000/student/2
+
+

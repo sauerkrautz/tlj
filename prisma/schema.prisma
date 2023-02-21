@@ -1,0 +1,70 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["clientExtensions", "deno", "extendedWhereUnique", "fieldReference", "multiSchema"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model buku {
+  id_buku      Int            @id @default(autoincrement())
+  kode_buku    String         @unique(map: "kode_buku") @db.VarChar(255)
+  nama_buku    String         @db.VarChar(255)
+  kategori     String         @db.VarChar(255)
+  pengarang    String         @db.VarChar(255)
+  id_penerbit  Int
+  penerbit     penerbit       @relation(fields: [id_penerbit], references: [id_penerbit], onDelete: NoAction, onUpdate: NoAction, map: "buku_penerbit")
+  peminjaman   peminjaman[]
+  pengembalian pengembalian[]
+
+  @@index([id_penerbit], map: "buku_penerbit")
+}
+
+model peminjaman {
+  id_peminjaman Int           @id @default(autoincrement())
+  tgl_pinjam    String        @db.VarChar(255)
+  id_buku       Int
+  id_siswa      Int
+  buku          buku          @relation(fields: [id_buku], references: [id_buku], onDelete: NoAction, onUpdate: NoAction, map: "ib_buku_peminjaman")
+  siswa         siswa         @relation(fields: [id_siswa], references: [id_siswa], onDelete: NoAction, onUpdate: NoAction, map: "id_siswa_peminjaman")
+  pengembalian  pengembalian?
+
+  @@index([id_buku], map: "ib_buku_peminjaman")
+  @@index([id_siswa], map: "id_siswa_peminjaman")
+}
+
+model penerbit {
+  id_penerbit   Int    @id @default(autoincrement())
+  nama_penerbit String @db.VarChar(255)
+  alamat        String @db.VarChar(255)
+  no_telp       String @db.VarChar(255)
+  kota          String @db.VarChar(255)
+  buku          buku[]
+}
+
+model pengembalian {
+  id_pengembalian  Int        @id @default(autoincrement())
+  tgl_pengembalian DateTime   @db.Date
+  id_siswa         Int
+  id_buku          Int
+  id_peminjaman    Int
+  buku             buku       @relation(fields: [id_buku], references: [id_buku], onDelete: NoAction, onUpdate: NoAction, map: "id_buku_pengembalian")
+  peminjaman       peminjaman @relation(fields: [id_pengembalian], references: [id_peminjaman], onDelete: NoAction, onUpdate: NoAction, map: "id_peminjaman_pengembalian")
+  siswa            siswa      @relation(fields: [id_siswa], references: [id_siswa], onDelete: NoAction, onUpdate: NoAction, map: "id_siswa_pengembalian")
+
+  @@index([id_buku], map: "id_buku_pengembalian")
+  @@index([id_siswa], map: "id_siswa_pengembalian")
+}
+
+model siswa {
+  id_siswa     Int            @id @default(autoincrement())
+  nis          String         @unique(map: "nis") @db.VarChar(255)
+  nama         String         @db.VarChar(255)
+  kelas        String         @db.VarChar(255)
+  jekel        String         @db.VarChar(1)
+  jurusan      String         @db.VarChar(255)
+  peminjaman   peminjaman[]
+  pengembalian pengembalian[]
+}
