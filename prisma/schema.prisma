@@ -30,6 +30,8 @@ model peminjaman {
   buku          buku          @relation(fields: [id_buku], references: [id_buku], onDelete: NoAction, onUpdate: NoAction, map: "ib_buku_peminjaman")
   siswa         siswa         @relation(fields: [id_siswa], references: [id_siswa], onDelete: NoAction, onUpdate: NoAction, map: "id_siswa_peminjaman")
   pengembalian  pengembalian?
+  user          user?         @relation(fields: [userId_user], references: [id_user])
+  userId_user   String?
 
   @@index([id_buku], map: "ib_buku_peminjaman")
   @@index([id_siswa], map: "id_siswa_peminjaman")
@@ -50,9 +52,11 @@ model pengembalian {
   id_siswa         Int
   id_buku          Int
   id_peminjaman    Int
+  id_user          String?
   buku             buku       @relation(fields: [id_buku], references: [id_buku], onDelete: NoAction, onUpdate: NoAction, map: "id_buku_pengembalian")
   peminjaman       peminjaman @relation(fields: [id_pengembalian], references: [id_peminjaman], onDelete: NoAction, onUpdate: NoAction, map: "id_peminjaman_pengembalian")
   siswa            siswa      @relation(fields: [id_siswa], references: [id_siswa], onDelete: NoAction, onUpdate: NoAction, map: "id_siswa_pengembalian")
+  user             user?      @relation(fields: [id_user], references: [id_user])
 
   @@index([id_buku], map: "id_buku_pengembalian")
   @@index([id_siswa], map: "id_siswa_pengembalian")
@@ -67,4 +71,15 @@ model siswa {
   jurusan      String         @db.VarChar(255)
   peminjaman   peminjaman[]
   pengembalian pengembalian[]
+  user         user[]
+}
+
+model user {
+  id_user      String         @id @default(uuid())
+  email        String         @unique @db.VarChar(255)
+  password     String         @db.VarChar(255)
+  peminjaman   peminjaman[]
+  siswa        siswa          @relation(fields: [id_siswa], references: [id_siswa])
+  pengembalian pengembalian[]
+  id_siswa     Int
 }
